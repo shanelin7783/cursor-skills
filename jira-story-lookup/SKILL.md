@@ -1,0 +1,69 @@
+---
+name: jira-story-lookup
+description: >-
+  Fetches a Jira user story's acceptance criteria by reading the DoR/AC/DoD
+  custom field first, falling back to the description if empty. Use when the
+  user asks to look up, read, show, or check the ACs, DoR/AC/DoD, or
+  acceptance criteria of a Jira ticket.
+---
+
+# Jira: Look up story acceptance criteria
+
+## When to apply
+
+Use this skill when the user asks to **look up**, **read**, **show**, or **check** the ACs / DoR/AC/DoD of a Jira ticket (e.g. "show me TSWE-105's ACs", "what are the acceptance criteria for TSWE-105").
+
+## Tools used in this skill
+
+| Tool | Purpose |
+|------|---------|
+| MCP `getJiraIssue` (server: `plugin-atlassian-atlassian`) | Fetch issue fields |
+
+**No other tools are used.** This is a **read-only** skill — do NOT create, edit, or modify any Jira issue.
+
+## MCP call template
+
+```jsonc
+{
+  "cloudId": "d6d0669c-de5c-489c-a712-6e3ebf62d37a",
+  "issueIdOrKey": "<issue key, e.g. TSWE-105>",
+  "fields": ["summary", "description", "customfield_10115"],
+  "responseContentFormat": "markdown"
+}
+```
+
+### Critical field mapping
+
+| UI label | Field id | Notes |
+|----------|----------|-------|
+| DoR/AC/DoD | `customfield_10115` | ADF document; returned as markdown when `responseContentFormat` is `"markdown"` |
+
+**WARNING:** The DoR/AC/DoD field is `customfield_10115`. Do **NOT** use `customfield_11878` — that is a different field.
+
+## Workflow
+
+1. **Call `getJiraIssue`** with the template above, filling in the user-provided issue key.
+
+2. **Check `customfield_10115`** (DoR/AC/DoD):
+   - If **non-null and non-empty**: present this content as the acceptance criteria. Label it as **DoR/AC/DoD**.
+
+3. **Fallback — check `description`** (only if `customfield_10115` is null/empty):
+   - Scan the `description` field for AC-like patterns: `AC1`, `**AC`, `Acceptance Criteria`, checklist items (`- [ ]`), numbered criteria.
+   - If found: extract and present the AC sections. Label them as **from Description (no DoR/AC/DoD field set)**.
+   - If not found: report that **no acceptance criteria were found** on this ticket.
+
+4. **Output format**: Always include:
+   - Issue key and summary as a header (with Jira link: `https://arcadie.atlassian.net/browse/<key>`)
+   - The source label (DoR/AC/DoD vs Description)
+   - The AC content in readable markdown
+
+## Guardrails
+
+- Do **NOT** create, edit, or modify any Jira issue.
+- Do **NOT** call `getAccessibleAtlassianResources` or any other discovery tool — use the hardcoded `cloudId`.
+- Do **NOT** guess or fabricate AC content. Only present what is returned by the API.
+- If the API call fails, **STOP** and report the error to the user.
+
+## Reference
+
+The `cloudId` and field IDs are site-specific to the Arcadie Jira Cloud instance. See [`../jira-story-publish/reference.md`](../jira-story-publish/reference.md) for the full field mapping table.
