@@ -25,8 +25,8 @@ If requirements are **ambiguous** or the images leave questions open, ask the us
 
 ## Language
 
-- **Default**: Write the ticket body in **English** (**`ACn —`** section lines may stay as-is or match the user's Jira locale).
-- If the user specifies another language (e.g. Traditional Chinese), use it **consistently** for Description and all ACs.
+- **Always write in English** — Description, all ACs, and Optional sections must be in English regardless of the language the user uses to describe the feature.
+- Only switch to another language (e.g. Traditional Chinese) if the user **explicitly requests** it (e.g. "用中文寫", "write in Chinese").
 
 ## Output shape
 
