@@ -30,7 +30,7 @@ If requirements are **ambiguous** or the images leave questions open, ask the us
 
 ## Output shape
 
-The output is **standard Markdown** written to a **single `.md` file**. When the ticket is created via **[jira-story-publish](../jira-story-publish/SKILL.md)**, the AC portion is converted to ADF by `md_to_adf.mjs` which faithfully mirrors the markdown — what you write is what appears in Jira.
+The output is **standard Markdown** written to a **single `.md` file**. When the ticket is created via **[jira-story-publish](../jira-story-publish/SKILL.md)**, the AC portion is converted to ADF by the **[md-to-adf](../md-to-adf/SKILL.md)** skill which faithfully mirrors the markdown — what you write is what appears in Jira.
 
 1. **Description** — Three lines at the top of the file (no label prefix):
    - `As a {role},`
