@@ -94,11 +94,62 @@ Rules:
 - Put **unset decisions** under **`Optional`** with `- [ ]` items (e.g. confirm dialog for delete, extra "More" menu).
 - Keep the same ordering as the UI (e.g. left-to-right toolbar buttons).
 
+## Inline formatting (readability)
+
+Apply the following formatting **inside** each checklist line to help readers scan and understand quickly. These all survive ADF conversion (bold → `strong`, backtick → `code`).
+
+### Bold the subject
+
+Start each checklist line by **bolding the UI element, component, or concept** being verified. This gives the reader an instant visual anchor.
+
+```markdown
+- [ ] **Page title** displays "Workflows"
+- [ ] **"+ Add Workflow" button** is displayed in the top-right corner
+- [ ] **Table columns** include Name, Used By, Status, Created Date, Last Updated Date, Action
+```
+
+### Inline code for exact UI copy
+
+Wrap **exact labels, tooltip text, placeholder text, field names, and error messages** in backticks so they stand out as literal copy that must match.
+
+```markdown
+- [ ] **Execute step** icon tooltip text is `Execute step`
+- [ ] **Delete** icon tooltip text is `Delete`
+- [ ] **Search field** placeholder text is `Search workflows…`
+- [ ] When validation fails, error message shows `Name is required`
+```
+
+### Nested items for conditions
+
+When a single behavior has **conditional branches or multiple states**, use a parent line describing the scope, followed by indented sub-items for each branch:
+
+```markdown
+- [ ] **Status toggle** reflects current node state:
+  - [ ] When active → tooltip shows `Deactivate`
+  - [ ] When inactive → tooltip shows `Activate`
+  - [ ] When inactive → a gray `(Deactivated)` label appears below the node title
+```
+
+### Context sentence (optional)
+
+For complex ACs, add a **brief plain-text sentence** between the AC heading and the checklist to set scope and intent. Keep it to one or two sentences.
+
+```markdown
+**AC3 — Activate / Deactivate Toggle**
+
+The toolbar power icon lets the user toggle the node between active and deactivated states. Visual feedback updates immediately without a page reload.
+
+- [ ] **Power icon** click toggles the node between active and deactivated
+- [ ] **Status toggle** reflects current node state:
+  - [ ] When active → tooltip shows `Deactivate`
+  - [ ] When inactive → tooltip shows `Activate`
+```
+
 ## Specificity (required)
 
 Include wherever relevant:
 
-- **Copy**: Page title, button labels, menu labels, **tooltip** text.
+- **Copy**: Page title, button labels, menu labels, **tooltip** text — wrap in backticks (`` ` ``).
 - **Tables**: Column names, empty states (e.g. `—`), badges/counts.
 - **Formats**: Dates (`YYYY-MM-DD HH:mm:ss`), `{username}` placeholders if needed.
 - **Visuals**: Label colors (e.g. green/gray), destructive styling (e.g. red outline for delete).
@@ -124,20 +175,24 @@ So that {benefit}.
 
 **AC1 — {ShortTitle}**
 
-- [ ] …
-- [ ] …
+{Optional context sentence describing the scope of this AC.}
+
+- [ ] **{UI element or concept}** {expected behavior with `exact labels` in backticks}
+- [ ] **{Another element}** {behavior}
 
 ---
 
 **AC2 — {ShortTitle}**
 
-- [ ] …
+- [ ] **{Element}** reflects current state:
+  - [ ] When {condition A} → {outcome with `label`}
+  - [ ] When {condition B} → {outcome with `label`}
 
 ---
 
 **Optional**
 
-- [ ] …
+- [ ] **{Element}** {open question or unconfirmed behavior}
 ```
 
 ## Additional examples

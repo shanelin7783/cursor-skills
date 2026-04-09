@@ -24,9 +24,28 @@ AC1: Workflow List Display
 
 **AC1 — Workflow List Display**
 
-- [ ] Page title displays "Workflows"
-- [ ] Top-right "+ Add Workflow" opens Workflow creation
-- [ ] Table columns include Name, Used By, Status, Created Date, Last Updated Date, Action
+The main list page presents all workflows in a sortable table with quick-access actions.
+
+- [ ] **Page title** displays `Workflows`
+- [ ] **"+ Add Workflow" button** is displayed in the top-right corner; clicking it navigates to the Workflow creation page
+- [ ] **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
+- [ ] **Empty state** — when no workflows exist, the table body shows `No workflows found`
+- [ ] **Created Date / Last Updated Date** format is `YYYY-MM-DD HH:mm:ss`
+
+---
+
+**AC2 — Search and Filter**
+
+Users can narrow down the workflow list using keyword search and status filter.
+
+- [ ] **Search field** placeholder text is `Search workflows…`
+- [ ] **Search** filters the list by workflow name (case-insensitive partial match)
+- [ ] **Status filter** dropdown options include: `All`, `Active`, `Inactive`
+- [ ] **Filter behavior** reflects current selection:
+  - [ ] When `All` is selected → all workflows are displayed
+  - [ ] When `Active` is selected → only workflows with Status = Active are displayed
+  - [ ] When `Inactive` is selected → only workflows with Status = Inactive are displayed
+- [ ] **Results count** badge updates to reflect the filtered total
 
 ---
 
@@ -40,37 +59,44 @@ So that I can run, toggle, or remove that node on the canvas without leaving the
 
 **AC1 — Hover Toolbar — Show and Hide**
 
-- [ ] Hovering a node shows a floating toolbar above (or adjacent to) the node
-- [ ] Toolbar order left-to-right: Execute step (play) → Activate/Deactivate (power) → Delete (trash)
-- [ ] "Execute step" tooltip text is `Execute step`
-- [ ] "Delete" tooltip text is `Delete`; icon uses destructive styling per design
-- [ ] Pointer leaving the node/toolbar hides the toolbar (per agreed hover rules)
+A floating toolbar appears above the node on hover, providing quick actions in a consistent order.
+
+- [ ] **Toolbar** appears above (or adjacent to) the node when the user hovers over it
+- [ ] **Toolbar button order** left-to-right: Execute step (play icon) → Activate/Deactivate (power icon) → Delete (trash icon)
+- [ ] **Execute step** icon tooltip text is `Execute step`
+- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (red) per design
+- [ ] **Toolbar dismissal** — moving the pointer away from both the node and the toolbar hides the toolbar
 
 ---
 
 **AC2 — Execute Step**
 
-- [ ] Clicking Execute step runs execution for that node only
+- [ ] **Execute step** button click triggers execution for that node only
+- [ ] **Execution feedback** — a loading indicator appears on the node during execution
 
 ---
 
-**AC3 — Activate / Deactivate**
+**AC3 — Activate / Deactivate Toggle**
 
-- [ ] Click toggles active vs deactivated
-- [ ] When active: power icon tooltip shows `Deactivate`
-- [ ] When deactivated: power icon tooltip shows `Activate`
-- [ ] When deactivated: a gray `(Deactivated)` line appears directly under the node title
-- [ ] When active: `(Deactivated)` line is hidden
-- [ ] After toggle, UI updates without full page reload
+The toolbar power icon lets the user toggle the node between active and deactivated states. Visual feedback updates immediately without a page reload.
+
+- [ ] **Power icon** click toggles the node between active and deactivated
+- [ ] **Status toggle** reflects current node state:
+  - [ ] When active → tooltip shows `Deactivate`
+  - [ ] When inactive → tooltip shows `Activate`
+  - [ ] When inactive → a gray `(Deactivated)` label appears directly below the node title
+  - [ ] When active → `(Deactivated)` label is hidden
+- [ ] **UI update** — after toggle, the node state updates without a full page reload
 
 ---
 
 **AC4 — Delete**
 
-- [ ] Clicking Delete removes the node and updates connections
+- [ ] **Delete** button click removes the node from the canvas
+- [ ] **Connections** — upstream and downstream connections linked to the deleted node are also removed
 
 ---
 
 **Optional**
 
-- [ ] Delete requires confirmation dialog (if product decides)
+- [ ] **Delete confirmation** — clicking `Delete` shows a confirmation dialog before removing the node (pending product decision)
