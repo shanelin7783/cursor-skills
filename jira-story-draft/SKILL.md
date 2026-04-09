@@ -2,13 +2,13 @@
 name: jira-story-draft
 description: >-
   Writes Jira user stories with Description (As a / I want / So that), numbered acceptance
-  criteria with short titles, nested bullets, and checklist-style verifiable items.
-  Use when the user asks for Jira tickets, user stories, acceptance criteria, AC,
-  backlog items, PRD story format, QA checklists, or refining requirements into
+  criteria with short titles, checklist-style verifiable items, and GWT sub-items for
+  complex flows. Use when the user asks for Jira tickets, user stories, acceptance criteria,
+  AC, backlog items, PRD story format, QA checklists, or refining requirements into
   testable criteria.
 ---
 
-# Jira Story Draft (checklist-friendly)
+# Jira Story Draft
 
 ## When to apply
 
@@ -40,7 +40,7 @@ The output is **standard Markdown** written to a **single `.md` file**. When the
 
 2. **`**ACn — Short Title**`** — Number sequentially (`AC1`, `AC2`, …). Wrap the section line in `**…**` so it renders bold in Jira. Use an **em dash** (`—`) between the number and the short title (matching TSWE DoR/AC/DoD visible pattern).
 
-3. **Acceptance content** — Prefer **one verifiable behavior per checklist line**. Group related lines under the same AC.
+3. **Acceptance content** — Prefer **one verifiable behavior per checklist line**. When a behavior has multiple scenarios (nested conditions or GWT), the parent `- [ ]` line states the behavior and each sub-item `- [ ]` is one testable scenario. Group related lines under the same AC.
 
 4. **`---` between AC sections** — Put a horizontal rule (`---`) between each AC block (and before `**Optional**`). This becomes a visual separator (`rule`) in Jira's DoR/AC/DoD field. Do **not** add `---` after the last section.
 
@@ -79,6 +79,7 @@ When not using checkboxes:
 - Sub-items: `◦`
 - **Conditionals**: spell out branches (e.g. `When Status is Active, …` / `When Status is Inactive, …`).
 - **After actions**: state whether the list/view **refreshes**, tooltips update, etc.
+- **`(design ref)` and Optional rules still apply** — tag visual-only details from mockups and surface unconfirmed behaviors the same way as in checklist mode.
 
 ## Checklist mode (default)
 
@@ -91,8 +92,12 @@ Use Markdown task items:
 Rules:
 
 - Each `- [ ]` maps to **one** testable outcome (or one clearly bounded UI rule).
-- Put **unset decisions** under **`Optional`** with `- [ ]` items (e.g. confirm dialog for delete, extra "More" menu).
 - Keep the same ordering as the UI (e.g. left-to-right toolbar buttons).
+- Put the following under **`Optional`** with `- [ ]` items:
+  - **Unset decisions** — features pending product confirmation (e.g. confirm dialog for delete, extra "More" menu).
+  - **Error states** — what happens when API calls fail, network is down, or server returns an error.
+  - **Boundary conditions** — edge cases whose expected behavior is **unconfirmed** (max limits, concurrent edits, duplicate entries).
+  - **Negative paths** — actions that should be disabled or blocked under certain conditions.
 
 ## Inline formatting (readability)
 
@@ -103,9 +108,9 @@ Apply the following formatting **inside** each checklist line to help readers sc
 Start each checklist line by **bolding the UI element, component, or concept** being verified. This gives the reader an instant visual anchor.
 
 ```markdown
-- [ ] **Page title** displays "Workflows"
-- [ ] **"+ Add Workflow" button** is displayed in the top-right corner
-- [ ] **Table columns** include Name, Used By, Status, Created Date, Last Updated Date, Action
+- [ ] **Page title** displays `Workflows`
+- [ ] **"+ Add Workflow" button** is displayed (design ref: top-right corner)
+- [ ] **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
 ```
 
 ### Inline code for exact UI copy
@@ -121,7 +126,7 @@ Wrap **exact labels, tooltip text, placeholder text, field names, and error mess
 
 ### Nested items for conditions
 
-When a single behavior has **conditional branches or multiple states**, use a parent line describing the scope, followed by indented sub-items for each branch:
+When a single element displays **differently depending on its current state** — without requiring a user action to observe — use a parent line describing the scope, followed by indented sub-items for each branch. This is for **static display differences** across states:
 
 ```markdown
 - [ ] **Status toggle** reflects current node state:
@@ -129,6 +134,22 @@ When a single behavior has **conditional branches or multiple states**, use a pa
   - [ ] When inactive → tooltip shows `Activate`
   - [ ] When inactive → a gray `(Deactivated)` label appears below the node title
 ```
+
+### GWT sub-items for complex flows
+
+When the AC involves a **user action whose outcome depends on preconditions or triggers side effects**, use a parent `- [ ]` line summarizing the behavior, followed by indented `- [ ]` sub-items in **Given / When / Then** format. Each sub-item describes one scenario and is independently checkable.
+
+Use GWT instead of nested conditions when: (1) the outcome depends on a **setup step or precondition** the tester must arrange, or (2) the behavior involves a **user-triggered action** (click, submit, delete) rather than passive display.
+
+```markdown
+- [ ] **Execute step** triggers execution and provides feedback:
+  - [ ] Given the toolbar is visible, when the user clicks **Execute step**, then execution is triggered for that node only
+  - [ ] Given execution is in progress, when it completes, then the loading indicator is removed and the node displays the result
+```
+
+Same inline formatting rules apply inside GWT sub-items: bold key elements, backtick exact UI copy.
+
+> GWT sub-items must use `- [ ]` (not plain `- `) so Jira renders them as a nested task list.
 
 ### Context sentence (optional)
 
@@ -147,13 +168,29 @@ The toolbar power icon lets the user toggle the node between active and deactiva
 
 ## Specificity (required)
 
-Include wherever relevant:
+### Behavioral (must-write)
+
+Observable outcomes that define pass/fail — these are hard requirements:
 
 - **Copy**: Page title, button labels, menu labels, **tooltip** text — wrap in backticks (`` ` ``).
 - **Tables**: Column names, empty states (e.g. `—`), badges/counts.
 - **Formats**: Dates (`YYYY-MM-DD HH:mm:ss`), `{username}` placeholders if needed.
-- **Visuals**: Label colors (e.g. green/gray), destructive styling (e.g. red outline for delete).
 - **State**: What shows when active vs inactive; secondary lines under titles (e.g. `(Deactivated)`).
+- **Empty / boundary states**: What appears when a list is empty, a limit is reached, or input is invalid — include in ACs when the behavior is **confirmed by product**.
+
+### Visual design reference
+
+Layout and styling details extracted from mockups that **may change with design iterations**. Tag these with `(design ref)` so the team knows they come from the current mockup and are subject to change:
+
+- Colors (e.g. destructive styling) → `(design ref: red)`
+- Positions (e.g. button placement) → `(design ref: top-right corner)`
+- Icon types → `(design ref: play icon, trash icon)`
+- Spacing, sizing, layout direction
+
+```markdown
+- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (design ref: red)
+- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete (design ref: play icon, power icon, trash icon)
+```
 
 ## Workflow
 
@@ -161,8 +198,8 @@ Include wherever relevant:
 2. **Analyse images**: extract visible UI text, layout, states, interactions, icons, and visual cues.
 3. **Draft Description**: single coherent "As a … / I want … / So that …".
 4. **Decompose ACs**: group by screen area or user task (display → filters → primary actions → secondary/menus → post-conditions). Separate AC sections with `---`.
-5. **Expand**: checklist lines first; add **Optional** for open questions.
-6. **Self-check**: every branch and post-action refresh is covered; no ambiguous "works correctly."
+5. **Expand**: checklist lines first; use GWT sub-items where preconditions matter; add **Optional** for edge cases and open questions.
+6. **Self-check**: every branch and post-action refresh is covered; no ambiguous "works correctly." Edge cases and error states are surfaced in **Optional** if not already covered in ACs.
 7. **Write** the complete markdown to `/tmp/{slug}-story-draft.md` using the Write file tool.
 8. **STOP**: present the file path to the user and wait for review and confirmation.
 
@@ -178,7 +215,7 @@ So that {benefit}.
 {Optional context sentence describing the scope of this AC.}
 
 - [ ] **{UI element or concept}** {expected behavior with `exact labels` in backticks}
-- [ ] **{Another element}** {behavior}
+- [ ] **{Another element}** {behavior} (design ref: {visual detail from mockup})
 
 ---
 
@@ -190,9 +227,19 @@ So that {benefit}.
 
 ---
 
+**AC3 — {ShortTitle}**
+
+- [ ] **{Element}** {summary of behavior with preconditions}:
+  - [ ] Given {precondition A}, when {action}, then {outcome}
+  - [ ] Given {precondition B}, when {action}, then {outcome}
+
+---
+
 **Optional**
 
 - [ ] **{Element}** {open question or unconfirmed behavior}
+- [ ] **{Error state}** — {what happens when something fails}
+- [ ] **{Boundary condition}** — {edge case behavior}
 ```
 
 ## Additional examples

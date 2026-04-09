@@ -14,11 +14,11 @@ So that I can quickly locate target Workflows and perform actions such as edit, 
 
 AC1: Workflow List Display
 
-• Page title displays "Workflows"
+• **Page title** displays `Workflows`
 
-• A "+ Add Workflow" button is displayed in the top-right corner; clicking it navigates to the Workflow creation page
+• **"+ Add Workflow" button** is displayed (design ref: top-right corner); clicking it navigates to the Workflow creation page
 
-• The list is rendered as a table with columns: Name, Used By, Status, Created Date, Last Updated Date, Action
+• **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
 
 **Checklist AC snippet (preferred)**
 
@@ -27,7 +27,7 @@ AC1: Workflow List Display
 The main list page presents all workflows in a sortable table with quick-access actions.
 
 - [ ] **Page title** displays `Workflows`
-- [ ] **"+ Add Workflow" button** is displayed in the top-right corner; clicking it navigates to the Workflow creation page
+- [ ] **"+ Add Workflow" button** is displayed (design ref: top-right corner); clicking it navigates to the Workflow creation page
 - [ ] **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
 - [ ] **Empty state** — when no workflows exist, the table body shows `No workflows found`
 - [ ] **Created Date / Last Updated Date** format is `YYYY-MM-DD HH:mm:ss`
@@ -62,17 +62,18 @@ So that I can run, toggle, or remove that node on the canvas without leaving the
 A floating toolbar appears above the node on hover, providing quick actions in a consistent order.
 
 - [ ] **Toolbar** appears above (or adjacent to) the node when the user hovers over it
-- [ ] **Toolbar button order** left-to-right: Execute step (play icon) → Activate/Deactivate (power icon) → Delete (trash icon)
+- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete (design ref: play icon, power icon, trash icon)
 - [ ] **Execute step** icon tooltip text is `Execute step`
-- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (red) per design
+- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (design ref: red)
 - [ ] **Toolbar dismissal** — moving the pointer away from both the node and the toolbar hides the toolbar
 
 ---
 
 **AC2 — Execute Step**
 
-- [ ] **Execute step** button click triggers execution for that node only
-- [ ] **Execution feedback** — a loading indicator appears on the node during execution
+- [ ] **Execute step** triggers execution and provides feedback:
+  - [ ] Given the toolbar is visible, when the user clicks **Execute step**, then execution is triggered for that node only
+  - [ ] Given execution is in progress, when it completes, then the loading indicator is removed and the node displays the result
 
 ---
 
@@ -100,3 +101,5 @@ The toolbar power icon lets the user toggle the node between active and deactiva
 **Optional**
 
 - [ ] **Delete confirmation** — clicking `Delete` shows a confirmation dialog before removing the node (pending product decision)
+- [ ] **Execute step disabled** — `Execute step` button is disabled while the node is already executing
+- [ ] **Error feedback** — if execution fails, the node displays an error indicator with a tooltip showing the error message
