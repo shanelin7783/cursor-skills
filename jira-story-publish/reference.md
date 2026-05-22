@@ -1,12 +1,15 @@
-# Reference: TSWE defaults
+# Reference: Jira field ids (Arcadie site)
 
-## Site-specific ids (Arcadie — re-verify if your admin changes fields)
+Used by **[jira-story-publish](SKILL.md)** (default `projectKey: TSWE`) and **[jira-story-publish-ogg](../jira-story-publish-ogg/SKILL.md)** (user-provided `projectKey`). OGG squads on this Jira Cloud site typically share the same custom field ids; only `projectKey` and Epic differ per squad.
+
+## Site-specific ids (re-verify if your admin changes fields)
 
 | UI / concept | Field id | Notes |
 |--------------|----------|--------|
 | Squad | `customfield_18750` | Multiselect; Tech SaaS = `26753` |
 | Brand Markets | `customfield_11476` | Multiselect; see option ids below |
 | DoR/AC/DoD | `customfield_10115` | **ADF** document only |
+| Remark | `customfield_10178` | **ADF** rich text (not `customfield_10108` "Remarks") |
 | Epic Link (classic) | `customfield_10014` | String epic key, e.g. `TSWE-66` |
 | Parent (hierarchy) | `parent` | `{"key": "TSWE-66"}` |
 
@@ -34,4 +37,4 @@
 
 ## Disclaimer
 
-Field and option ids differ across **Jira Cloud sites**, **projects**, and **issue type screens**. Treat this file as a **working snapshot** for TSWE Stories; refresh ids when Jira admins change configuration.
+Field and option ids differ across **Jira Cloud sites**, **projects**, and **issue type screens**. Treat this file as a **working snapshot** for Story issues on this site; refresh ids when Jira admins change configuration.

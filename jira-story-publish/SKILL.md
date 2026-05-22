@@ -3,24 +3,34 @@ name: jira-story-publish
 description: >-
   Creates a Jira Story from jira-story-draft output using Atlassian MCP: Summary,
   Epic link, default Squad (Tech SaaS) and Brand Markets, Description (user story
-  only), DoR/AC/DoD as ADF via md-to-adf skill. Use when the user wants to open a
-  real Jira ticket from a drafted user story, TSWE Story, Epic parent, or
-  automating createJiraIssue plus editJiraIssue for acceptance criteria.
+  only), DoR/AC/DoD as ADF via md-to-adf skill. Use when publishing legacy
+  checklist-style drafts. For OGG Playbook drafts, use jira-story-publish-ogg instead.
 ---
 
-# Jira: Publish story to Jira
+# Jira: Publish story to Jira (legacy draft)
 
 ## When to apply
 
-Use after **[jira-story-draft](../jira-story-draft/SKILL.md)** (or equivalent) has produced a **confirmed** draft `.md` file containing **Description** + **AC1…** text. This skill governs **field mapping**, **defaults**, **MCP calls**, and **markdown → ADF** conversion — **not** rewriting the narrative.
+Use after **[jira-story-draft](../jira-story-draft/SKILL.md)** has produced a **confirmed** draft `.md` file. This skill governs **field mapping**, **defaults**, **MCP calls**, and **markdown → ADF** conversion — **not** rewriting the narrative.
+
+For drafts from **[jira-story-draft-ogg](../jira-story-draft-ogg/SKILL.md)**, use **[jira-story-publish-ogg](../jira-story-publish-ogg/SKILL.md)** instead.
+
+**Draft shape (legacy):**
+
+| Part | Content |
+|------|---------|
+| Description | As / I want / So that |
+| DoR/AC/DoD field | DoR + AC1… + DoD + Optional — from first `**DoR` or `**AC` through EOF |
 
 ## Prerequisites
 
 The user must provide:
 
-1. **Confirmed draft file** — a `.md` file from the jira-story-draft phase (e.g. `/tmp/node-modal-story-draft.md`) that the user has already reviewed and approved.
+1. **Confirmed draft file** — from `jira-story-draft` (e.g. `/tmp/node-modal-story-draft.md`), already reviewed and approved.
 2. **Summary** (ticket title) — exact string for Jira `summary` (e.g. `[Editor]As a user, I want…`).
 3. **Epic key** (optional) — e.g. `TSWE-66`, sets parent Epic on the Story.
+
+Defaults: `projectKey` **TSWE**, Squad **Tech SaaS**, full Brand Markets set — see [reference.md](reference.md).
 
 ## Tools & scripts used in this skill
 
@@ -84,25 +94,25 @@ Field IDs and option IDs are site-specific. See [reference.md](reference.md) for
 
 ### DoR/AC/DoD (`customfield_10115`)
 
-- Contains **AC1…** and **Optional** sections only (everything after the Description block in the draft).
+- Contains **DoR**, **AC1…**, **DoD**, and **Optional** (everything from the first `**DoR` or `**AC` line through end of file). Legacy drafts without `**DoR` may start at `**AC1`.
 - Must be **ADF** — convert using the **[md-to-adf](../md-to-adf/SKILL.md)** skill, then pass the JSON object to `editJiraIssue`.
 - **Do not** hand-author large ADF in chat.
 
 ### AC markdown conventions
 
-The AC markdown format is defined in **[jira-story-draft](../jira-story-draft/SKILL.md)** → "Output shape". The md-to-adf skill faithfully converts it to ADF without normalization (WYSIWYG).
+Defined in **[jira-story-draft](../jira-story-draft/SKILL.md)** → "Output shape". The md-to-adf skill faithfully converts it to ADF without normalization (WYSIWYG).
 
 ## Workflow
 
 Execute these steps in order, using only the tools listed in "Tools & scripts used in this skill":
 
 1. **Read** the confirmed draft `.md` file (Read tool).
-2. **Extract Description** — all lines from the start of the file up to the first `**AC` line. This becomes the `description` string.
-3. **Extract ACs** — everything from the first `**AC` line to the end of the file. **Write** to `/tmp/{slug}-ac.md` (Write tool).
-4. **Convert ACs to ADF** — invoke the **[md-to-adf](../md-to-adf/SKILL.md)** skill on `/tmp/{slug}-ac.md` and capture stdout as ADF JSON.
+2. **Extract Description** — all lines from the start of the file up to the first `**DoR` or `**AC` line. This becomes the `description` string.
+3. **Extract DoR/AC/DoD** — everything from the first `**DoR` or `**AC` line to the end of the file. **Write** to `/tmp/{slug}-dor-ac-dod.md` (Write tool).
+4. **Convert to ADF** — invoke the **[md-to-adf](../md-to-adf/SKILL.md)** skill on `/tmp/{slug}-dor-ac-dod.md` and capture stdout as ADF JSON.
 5. **MCP `createJiraIssue`** — call with the exact argument template from above, filling in `summary`, `description`, and Epic fields as applicable.
 6. **MCP `editJiraIssue`** — call with the exact argument template from above, using the `key` from step 5 and the parsed ADF JSON from step 4.
-7. **Report** the created issue key and URL to the user. **Shell** — `rm /tmp/{slug}-ac.md` to clean up.
+7. **Report** the created issue key and URL to the user. **Shell** — `rm /tmp/{slug}-dor-ac-dod.md` to clean up.
 
 If **createJiraIssue** fails: **STOP**, report the error and full payload; do **not** silently swap field strategies. If **editJiraIssue** fails: **STOP** and report.
 
