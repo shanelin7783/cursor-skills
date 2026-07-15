@@ -101,27 +101,65 @@ Rules:
 
 ## Inline formatting (readability)
 
-Apply the following formatting **inside** each checklist line to help readers scan and understand quickly. These all survive ADF conversion (bold → `strong`, backtick → `code`).
+Formatting is a **vocabulary, not decoration**: each mark carries **one fixed meaning** so a reader can scan by style alone. Overusing a mark destroys its signal — "if everything is bold, nothing stands out." All three marks survive ADF conversion (bold → `strong`, backtick → `code`, italic → `em`; verified via md-to-adf).
 
-### Bold the subject
+| Mark | Meaning | Rule |
+|------|---------|------|
+| **Bold** | The subject the line verifies — a named UI element, or a run-in concept anchor | **One bold span per line** = its subject. Bold an element on **every** reference *that is a line's subject* — never demote to plain on repeat mentions across lines (Google/MS convention); within a line, the one-bold tiebreak governs. **No bold** in context sentences or running prose. |
+| `` `backtick` `` | Verbatim on-screen copy | Use when a string is the **character-for-character comparison target**: asserted to appear (labels, tooltip text, placeholder, error messages, field values), **or** referenced as an exact literal value in a Given/When condition (option value, typed input, state label). |
+| *italic* | Non-normative aside | Parentheticals that are **not** a pass/fail assertion — cross-AC scope notes, soft clarifiers, and `(design ref: …)`. Signals "scannable, not testable." |
 
-Start each checklist line by **bolding the UI element, component, or concept** being verified. This gives the reader an instant visual anchor.
+### Bold — one subject anchor per line
+
+Start each checklist line by **bolding the UI element or subject** being verified — a per-line scan anchor (the "lead-in" convention). Keep it to **one bold span per line**; do not bold the same element twice in a line, and do not bold anything in the context sentence. The lead-in anchor applies to **top-level checklist lines**; indented sub-items (nested conditions, GWT) inherit the parent's anchor and start with `When` / `Given` instead.
+
+Bold has exactly **two legitimate positions**:
+
+1. **Naming a UI element** that is the line's subject (Google/MS convention).
+2. **A run-in concept anchor** at the start of a line whose subject is not a named UI element (e.g. `**Empty state**`, `**Toolbar dismissal**`) — Google's style guide sanctions bold for run-in headings.
+
+Never bold a concept mid-line or in running prose — the "no bold for concepts" rule (GitLab) applies to everything after the line's anchor.
+
+**Bold span boundary:** bold exactly the element's **visible name** — no more (`**Execute step** button`, not `**Execute step button**`), and no quotes (bold already delimits the label). If the element has no visible label, bold the descriptive phrase you call it by (`**Search field**`, `**Power icon**`).
 
 ```markdown
 - [ ] **Page title** displays `Workflows`
-- [ ] **"+ Add Workflow" button** is displayed (design ref: top-right corner)
-- [ ] **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
+- [ ] **+ Add Workflow** button is displayed *(design ref: top-right corner)*
+- [ ] **Table columns** include: `Name`, `Used By`, `Status`, `Created Date`, `Last Updated Date`, `Action`
+- [ ] **Empty state** — when no workflows exist, the table body shows `No workflows found`
 ```
 
-### Inline code for exact UI copy
+### Bold vs backtick — naming vs asserting
 
-Wrap **exact labels, tooltip text, placeholder text, field names, and error messages** in backticks so they stand out as literal copy that must match.
+The boundary rule: **name a UI element → bold; assert an exact character string → backtick.** Button/menu/field names are "naming an element" (bold), *not* verbatim strings — **unless** the line verifies the characters match exactly (then backtick). The same text can take either mark depending on intent; the two marks can co-occur on different words in one line.
+
+**Decision heuristic:** a verb acting on a **UI element** (click, disable, hover) → the text **names** the element (bold if it's the line's anchor, plain otherwise). A string standing for **exact characters** — copy asserted to display, or the precise option/input value in a Given/When condition — → backtick. So "clicking Delete" names a button (plain), while "when `Active` is selected" fixes a value (backtick).
+
+**One-bold-per-line tiebreak:** when a line already has its bold subject anchor and references *another* UI element later in the same line, keep the anchor as the sole bold span. The secondary reference takes backtick if its exact label is being asserted, otherwise plain text — never a second bold. This preserves the one-anchor-per-line scan skeleton.
 
 ```markdown
-- [ ] **Execute step** icon tooltip text is `Execute step`
-- [ ] **Delete** icon tooltip text is `Delete`
+- [ ] **Execute step** button is displayed              ← naming the element → bold
+- [ ] **Execute step** icon tooltip text is `Execute step`  ← asserting exact copy → backtick
 - [ ] **Search field** placeholder text is `Search workflows…`
-- [ ] When validation fails, error message shows `Name is required`
+- [ ] When validation fails, **error message** shows `Name is required`
+- [ ] **Filter behavior** — when `Active` is selected, only active workflows display   ← condition references exact option value → backtick
+- [ ] **Delete confirmation** — clicking Delete shows a confirmation dialog   ← secondary element, named not asserted → plain
+```
+
+### Italic — non-normative asides
+
+Wrap any parenthetical that a tester could **skip without losing a pass/fail check** in italic: cross-AC scope notes, soft clarifiers, and all `(design ref: …)` tags (design refs are non-binding — "subject to change"). Never italicise a testable assertion.
+
+```markdown
+- [ ] **Validation timing** runs on every keystroke *(applies to AC1, AC2, AC3)*
+- [ ] **Delete** icon uses destructive styling *(design ref: red)*
+```
+
+**Parentheses ≠ italic.** The test is skippability, not punctuation — a parenthetical that *specifies or widens the pass condition* is normative and stays plain:
+
+```markdown
+- [ ] **Search** filters the list by workflow name (case-insensitive partial match)   ← test spec → plain
+- [ ] **Toolbar** appears above (or adjacent to) the node on hover                    ← widens the pass condition → plain
 ```
 
 ### Nested items for conditions
@@ -147,7 +185,7 @@ Use GWT instead of nested conditions when: (1) the outcome depends on a **setup 
   - [ ] Given execution is in progress, when it completes, then the loading indicator is removed and the node displays the result
 ```
 
-Same inline formatting rules apply inside GWT sub-items: bold key elements, backtick exact UI copy.
+Inside GWT sub-items there is **no lead-in anchor** (the parent line carries it), and still **at most one bold span per sub-item**: bold the UI element the action targets (e.g. clicks **Execute step**). Backtick exact UI copy as usual; a sub-item that names no element has no bold.
 
 > GWT sub-items must use `- [ ]` (not plain `- `) so Jira renders them as a nested task list.
 
@@ -172,7 +210,7 @@ The toolbar power icon lets the user toggle the node between active and deactiva
 
 Observable outcomes that define pass/fail — these are hard requirements:
 
-- **Copy**: Page title, button labels, menu labels, **tooltip** text — wrap in backticks (`` ` ``).
+- **Copy**: page title, button labels, menu labels, tooltip text — backtick whenever the exact string is **asserted to appear**; naming an element without asserting its characters follows the bold/plain rules (see Inline formatting).
 - **Tables**: Column names, empty states (e.g. `—`), badges/counts.
 - **Formats**: Dates (`YYYY-MM-DD HH:mm:ss`), `{username}` placeholders if needed.
 - **State**: What shows when active vs inactive; secondary lines under titles (e.g. `(Deactivated)`).
@@ -180,16 +218,17 @@ Observable outcomes that define pass/fail — these are hard requirements:
 
 ### Visual design reference
 
-Layout and styling details extracted from mockups that **may change with design iterations**. Tag these with `(design ref)` so the team knows they come from the current mockup and are subject to change:
+Layout and styling details extracted from mockups that **may change with design iterations**. Tag these with `(design ref)` so the team knows they come from the current mockup and are subject to change. Because design refs are non-binding, they are **italicised** as non-normative asides (see Inline formatting → Italic):
 
-- Colors (e.g. destructive styling) → `(design ref: red)`
-- Positions (e.g. button placement) → `(design ref: top-right corner)`
-- Icon types → `(design ref: play icon, trash icon)`
+- Colors (e.g. destructive styling) → `*(design ref: red)*`
+- Positions (e.g. button placement) → `*(design ref: top-right corner)*`
+- Icon types → `*(design ref: play icon, trash icon)*`
 - Spacing, sizing, layout direction
 
 ```markdown
-- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (design ref: red)
-- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete (design ref: play icon, power icon, trash icon)
+- [ ] **Delete** icon tooltip text is `Delete`
+- [ ] **Delete** icon uses destructive styling *(design ref: red)*
+- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete *(design ref: play icon, power icon, trash icon)*
 ```
 
 ## Workflow
@@ -215,7 +254,7 @@ So that {benefit}.
 {Optional context sentence describing the scope of this AC.}
 
 - [ ] **{UI element or concept}** {expected behavior with `exact labels` in backticks}
-- [ ] **{Another element}** {behavior} (design ref: {visual detail from mockup})
+- [ ] **{Another element}** {behavior} *(design ref: {visual detail from mockup})*
 
 ---
 

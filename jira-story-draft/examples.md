@@ -16,9 +16,11 @@ AC1: Workflow List Display
 
 • **Page title** displays `Workflows`
 
-• **"+ Add Workflow" button** is displayed (design ref: top-right corner); clicking it navigates to the Workflow creation page
+• **+ Add Workflow** button is displayed *(design ref: top-right corner)*
 
-• **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
+• **+ Add Workflow** button click navigates to the Workflow creation page
+
+• **Table columns** include: `Name`, `Used By`, `Status`, `Created Date`, `Last Updated Date`, `Action`
 
 **Checklist AC snippet (preferred)**
 
@@ -27,8 +29,9 @@ AC1: Workflow List Display
 The main list page presents all workflows in a sortable table with quick-access actions.
 
 - [ ] **Page title** displays `Workflows`
-- [ ] **"+ Add Workflow" button** is displayed (design ref: top-right corner); clicking it navigates to the Workflow creation page
-- [ ] **Table columns** include: Name, Used By, Status, Created Date, Last Updated Date, Action
+- [ ] **+ Add Workflow** button is displayed *(design ref: top-right corner)*
+- [ ] **+ Add Workflow** button click navigates to the Workflow creation page
+- [ ] **Table columns** include: `Name`, `Used By`, `Status`, `Created Date`, `Last Updated Date`, `Action`
 - [ ] **Empty state** — when no workflows exist, the table body shows `No workflows found`
 - [ ] **Created Date / Last Updated Date** format is `YYYY-MM-DD HH:mm:ss`
 
@@ -45,7 +48,7 @@ Users can narrow down the workflow list using keyword search and status filter.
   - [ ] When `All` is selected → all workflows are displayed
   - [ ] When `Active` is selected → only workflows with Status = Active are displayed
   - [ ] When `Inactive` is selected → only workflows with Status = Inactive are displayed
-- [ ] **Results count** badge updates to reflect the filtered total
+- [ ] **Results count badge** updates to reflect the filtered total
 
 ---
 
@@ -62,9 +65,10 @@ So that I can run, toggle, or remove that node on the canvas without leaving the
 A floating toolbar appears above the node on hover, providing quick actions in a consistent order.
 
 - [ ] **Toolbar** appears above (or adjacent to) the node when the user hovers over it
-- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete (design ref: play icon, power icon, trash icon)
+- [ ] **Toolbar button order** left-to-right: Execute step, Activate/Deactivate, Delete *(design ref: play icon, power icon, trash icon)*
 - [ ] **Execute step** icon tooltip text is `Execute step`
-- [ ] **Delete** icon tooltip text is `Delete`; icon uses destructive styling (design ref: red)
+- [ ] **Delete** icon tooltip text is `Delete`
+- [ ] **Delete** icon uses destructive styling *(design ref: red)*
 - [ ] **Toolbar dismissal** — moving the pointer away from both the node and the toolbar hides the toolbar
 
 ---
@@ -100,6 +104,6 @@ The toolbar power icon lets the user toggle the node between active and deactiva
 
 **Optional**
 
-- [ ] **Delete confirmation** — clicking `Delete` shows a confirmation dialog before removing the node (pending product decision)
-- [ ] **Execute step disabled** — `Execute step` button is disabled while the node is already executing
+- [ ] **Delete confirmation** — clicking Delete shows a confirmation dialog before removing the node *(pending product decision)*
+- [ ] **Execute step disabled** — Execute step button is disabled while the node is already executing
 - [ ] **Error feedback** — if execution fails, the node displays an error indicator with a tooltip showing the error message
