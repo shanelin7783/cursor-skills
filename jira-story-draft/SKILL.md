@@ -28,6 +28,38 @@ If requirements are **ambiguous** or the images leave questions open, ask the us
 - **Always write in English** — Description, all ACs, and Optional sections must be in English regardless of the language the user uses to describe the feature.
 - Only switch to another language (e.g. Traditional Chinese) if the user **explicitly requests** it (e.g. "用中文寫", "write in Chinese").
 
+## Summary (ticket title)
+
+The Summary is **not written into the draft file** — [jira-story-publish](../jira-story-publish/SKILL.md) treats everything above the first `**AC` line as the Description, so a title line there would be swallowed into it. **Propose the Summary in chat** when you present the file path, and let the user confirm or change it.
+
+**A Summary is the "I want" clause compressed to a phrase.** It states the user's goal, never the mechanism.
+
+### Rules
+
+- **No UI surfaces in the title** — no `modal`, `dialog`, `button`, `dropdown`, `menu`, `panel`, `toggle`. Those are how the goal is met today; they go stale the moment the surface is redesigned, and the ticket then lies about itself.
+- **Cover the whole story, not one action.** A title that names only the primary verb under-sells a story whose value has several parts. Two clauses joined by `and` / `without` / `as` are fine when a story genuinely carries two guarantees.
+- **No implementation vocabulary** — no internal state names, field IDs, component names, or the reference product's terms.
+- Sentence case, no trailing period, no `[Prefix]` tags unless the project already uses them.
+
+### How to derive it
+
+1. List the story's **value components** — the distinct promises a user would be upset to lose. Read them off the ACs, not off the UI.
+2. Draft 2–3 candidate titles.
+3. **Tick each candidate against each component.** Pick the one that covers them all; if none does, the title is too short or the story is too big.
+
+```
+Story: publish gesture + confirmation dialog + version naming
+Components: ① reaches production  ② what goes live is the on-screen draft  ③ the version gets named
+
+  Publish a workflow to production                              ① ✗ ✗
+  Publish a workflow to production as a named version           ① ✗ ③
+  Publish the current draft to production as a named version    ① ② ③   ← pick this
+```
+
+### Consistency with sibling tickets
+
+Match a sibling's **grammar** only when the siblings already follow these rules. If the existing backlog names UI elements (`Create workflow with name modal`), do **not** copy the anti-pattern for consistency's sake — name the value and say so when presenting the title, so the user can decide whether to keep the backlog internally consistent or correct going forward.
+
 ## Output shape
 
 The output is **standard Markdown** written to a **single `.md` file**. When the ticket is created via **[jira-story-publish](../jira-story-publish/SKILL.md)**, the AC portion is converted to ADF by the **[md-to-adf](../md-to-adf/SKILL.md)** skill which faithfully mirrors the markdown — what you write is what appears in Jira.
@@ -240,7 +272,8 @@ Layout and styling details extracted from mockups that **may change with design 
 5. **Expand**: checklist lines first; use GWT sub-items where preconditions matter; add **Optional** for edge cases and open questions.
 6. **Self-check**: every branch and post-action refresh is covered; no ambiguous "works correctly." Edge cases and error states are surfaced in **Optional** if not already covered in ACs.
 7. **Write** the complete markdown to `/tmp/{slug}-story-draft.md` using the Write file tool.
-8. **STOP**: present the file path to the user and wait for review and confirmation.
+8. **Derive the Summary** — list the story's value components, draft candidates, tick each against every component (see "Summary (ticket title)"). Keep it out of the file.
+9. **STOP**: present the file path **and the proposed Summary** to the user, and wait for review and confirmation.
 
 ## Minimal template
 

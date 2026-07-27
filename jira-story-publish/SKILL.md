@@ -27,7 +27,7 @@ For drafts from **[jira-story-draft-ogg](../jira-story-draft-ogg/SKILL.md)**, us
 The user must provide:
 
 1. **Confirmed draft file** — from `jira-story-draft` (e.g. `/tmp/node-modal-story-draft.md`), already reviewed and approved.
-2. **Summary** (ticket title) — exact string for Jira `summary` (e.g. `[Editor]As a user, I want…`).
+2. **Summary** (ticket title) — exact string for Jira `summary`, confirmed by the user. It is derived and proposed during drafting; see [jira-story-draft](../jira-story-draft/SKILL.md) → "Summary (ticket title)" for the rules (user goal, not UI mechanism; covers every value component). It is deliberately **absent from the draft file**, since everything above the first `**AC` line is read as the Description.
 3. **Epic key** (optional) — e.g. `TSWE-66`, sets parent Epic on the Story.
 
 Defaults: `projectKey` **TSWE**, Squad **Tech SaaS**, full Brand Markets set — see [reference.md](reference.md).
