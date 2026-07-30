@@ -29,7 +29,7 @@ standalone for any markdown-to-ADF conversion.
 
 1. **Convert** (Shell):
    ```bash
-   node ~/.cursor/skills/cursor-skills/md-to-adf/md_to_adf.bundle.cjs --compact <input.md>
+   node ~/.cursor/skills/jira-product-skills/md-to-adf/md_to_adf.bundle.cjs --compact <input.md>
    ```
    Output: ADF JSON to stdout. Capture and parse the JSON for use in MCP calls.
 

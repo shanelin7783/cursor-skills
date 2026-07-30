@@ -1,4 +1,4 @@
-# cursor-skills
+# jira-product-skills
 
 Personal Cursor agent skills for Jira story workflow.
 
@@ -19,12 +19,12 @@ Personal Cursor agent skills for Jira story workflow.
 
 1. Open **Cursor Settings** (Cmd+Shift+J)
 2. Go to **Rules** → **Add Rule** → **Remote Rule (Github)**
-3. Paste: `https://github.com/shanelin7783/cursor-skills`
+3. Paste: `https://github.com/shanelin7783/jira-product-skills`
 
 ### Option B: Git clone
 
 ```bash
-git clone git@github.com:shanelin7783/cursor-skills.git ~/.cursor/skills/cursor-skills
+git clone git@github.com:shanelin7783/jira-product-skills.git ~/.cursor/skills/jira-product-skills
 ```
 
 Restart Cursor after installation. All 6 skills will be available.
