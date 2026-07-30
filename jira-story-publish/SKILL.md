@@ -3,19 +3,17 @@ name: jira-story-publish
 description: >-
   Creates a Jira Story from jira-story-draft output using Atlassian MCP: Summary,
   Epic link, default Squad (Tech SaaS) and Brand Markets, Description (user story
-  only), DoR/AC/DoD as ADF via md-to-adf skill. Use when publishing legacy
-  checklist-style drafts. For OGG Playbook drafts, use jira-story-publish-ogg instead.
+  only), DoR/AC/DoD as ADF via md-to-adf skill. Use when publishing a confirmed
+  jira-story-draft output to Jira.
 ---
 
-# Jira: Publish story to Jira (legacy draft)
+# Jira: Publish story to Jira
 
 ## When to apply
 
 Use after **[jira-story-draft](../jira-story-draft/SKILL.md)** has produced a **confirmed** draft `.md` file. This skill governs **field mapping**, **defaults**, **MCP calls**, and **markdown → ADF** conversion — **not** rewriting the narrative.
 
-For drafts from **[jira-story-draft-ogg](../jira-story-draft-ogg/SKILL.md)**, use **[jira-story-publish-ogg](../jira-story-publish-ogg/SKILL.md)** instead.
-
-**Draft shape (legacy):**
+**Draft shape:**
 
 | Part | Content |
 |------|---------|

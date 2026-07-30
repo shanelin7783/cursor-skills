@@ -27,9 +27,13 @@ standalone for any markdown-to-ADF conversion.
 
 ## Workflow
 
-1. **Convert** (Shell):
+1. **Convert** (Shell) — run `md_to_adf.bundle.cjs`, which sits **in this skill's own
+   directory, next to this SKILL.md**. Resolve that directory from the path this skill
+   was loaded from; do not assume a fixed install location (project installs land in
+   `.agents/skills/md-to-adf/`, global installs in `~/.cursor/skills/md-to-adf/`).
+
    ```bash
-   node ~/.cursor/skills/jira-product-skills/md-to-adf/md_to_adf.bundle.cjs --compact <input.md>
+   node <this-skill-dir>/md_to_adf.bundle.cjs --compact <input.md>
    ```
    Output: ADF JSON to stdout. Capture and parse the JSON for use in MCP calls.
 

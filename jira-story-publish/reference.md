@@ -1,6 +1,6 @@
 # Reference: Jira field ids (Arcadie site)
 
-Used by **[jira-story-publish](SKILL.md)** (default `projectKey: TSWE`) and **[jira-story-publish-ogg](../jira-story-publish-ogg/SKILL.md)** (user-provided `projectKey`). OGG squads on this Jira Cloud site typically share the same custom field ids; only `projectKey` and Epic differ per squad.
+Used by **[jira-story-publish](SKILL.md)** (default `projectKey: TSWE`). Squads on this Jira Cloud site typically share the same custom field ids; only `projectKey` and Epic differ per squad.
 
 ## Site-specific ids (re-verify if your admin changes fields)
 

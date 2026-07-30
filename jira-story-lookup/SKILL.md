@@ -141,4 +141,4 @@ Add each field id to the `fields` array in one call — do not make separate API
 
 ## Reference
 
-The `cloudId` and field IDs are site-specific to the Arcadie Jira Cloud instance. See [`../jira-story-publish/reference.md`](../jira-story-publish/reference.md) for the shared field mapping table.
+The `cloudId` and field IDs above are site-specific to the Arcadie Jira Cloud instance. Re-verify them if your Jira admin changes the field configuration.
